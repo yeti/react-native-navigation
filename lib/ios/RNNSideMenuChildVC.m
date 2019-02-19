@@ -52,8 +52,8 @@
 	[self.options overrideOptions:options];
 }
 
-- (void)renderTreeAndWait:(BOOL)wait perform:(RNNReactViewReadyCompletionBlock)readyBlock {
-	[self.getCurrentChild renderTreeAndWait:wait perform:readyBlock];
+- (void)renderTreeAndWait:(BOOL)wait dispatchGroup:(dispatch_group_t)group {
+	[self.getCurrentChild renderTreeAndWait:wait dispatchGroup:group];
 }
 
 - (void)bindChildViewController:(UIViewController<RNNLayoutProtocol>*)child {

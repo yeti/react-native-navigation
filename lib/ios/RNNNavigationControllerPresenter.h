@@ -8,6 +8,8 @@
 
 - (void)applyOptionsBeforePopping:(RNNNavigationOptions *)options;
 
-- (void)renderComponents:(RNNNavigationOptions *)options perform:(RNNReactViewReadyCompletionBlock)readyBlock;
+- (void)renderComponents:(RNNNavigationOptions *)options;
+
+- (void)renderComponents:(RNNNavigationOptions *)options dispatchGroup:(dispatch_group_t)group;
 
 @end

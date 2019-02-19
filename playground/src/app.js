@@ -49,7 +49,7 @@ function start() {
             to: 1,
             duration: 300
           },
-          waitForRender: true
+          // waitForRender: true
         },
         _push: {
           topBar: {

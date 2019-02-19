@@ -65,7 +65,7 @@
 	[super viewWillAppear:animated];
 	
 	[_presenter applyOptions:self.resolveOptions];
-	[_presenter renderComponents:self.resolveOptions perform:nil];
+//	[_presenter renderComponents:self.resolveOptions dispatchGroup:nil];
 	
 	[((UIViewController<RNNParentProtocol> *)self.parentViewController) onChildWillAppear];
 }
@@ -88,30 +88,22 @@
 	[self.eventEmitter sendComponentDidDisappear:self.layoutInfo.componentId componentName:self.layoutInfo.name];
 }
 
-- (void)renderTreeAndWait:(BOOL)wait perform:(RNNReactViewReadyCompletionBlock)readyBlock {
+- (void)renderTreeAndWait:(BOOL)wait dispatchGroup:(dispatch_group_t)group {
 	if (self.isExternalViewController) {
-		if (readyBlock) {
-			readyBlock();
-		}
 		return;
 	}
 	
-	__block RNNReactViewReadyCompletionBlock readyBlockCopy = readyBlock;
+	if (wait) {
+		dispatch_group_enter(group);
+	}
 	UIView* reactView = [_creator createRootView:self.layoutInfo.name rootViewId:self.layoutInfo.componentId reactViewReadyBlock:^{
-		[_presenter renderComponents:self.resolveOptions perform:^{
-			if (readyBlockCopy) {
-				readyBlockCopy();
-				readyBlockCopy = nil;
-			}
-		}];
+		if (wait) {
+			dispatch_group_leave(group);
+		}
+		[_presenter renderComponents:self.resolveOptions dispatchGroup:group];
 	}];
 
 	self.view = reactView;
-	
-	if (!wait && readyBlock) {
-		readyBlockCopy();
-		readyBlockCopy = nil;
-	}
 }
 
 - (UIViewController *)getCurrentChild {

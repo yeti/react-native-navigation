@@ -37,7 +37,7 @@ const NSInteger TOP_BAR_TRANSPARENT_TAG = 78264803;
 
 - (void)onChildWillAppear {
 	[_presenter applyOptions:self.resolveOptions];
-	[_presenter renderComponents:self.resolveOptions perform:nil];
+	[_presenter renderComponents:self.resolveOptions];
 	[((UIViewController<RNNParentProtocol> *)self.parentViewController) onChildWillAppear];
 }
 
@@ -54,28 +54,12 @@ const NSInteger TOP_BAR_TRANSPARENT_TAG = 78264803;
 	[self.options overrideOptions:options];
 }
 
-- (void)renderTreeAndWait:(BOOL)wait perform:(RNNReactViewReadyCompletionBlock)readyBlock {
-	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
-		dispatch_group_t group = dispatch_group_create();
-		for (UIViewController<RNNLayoutProtocol>* childViewController in self.childViewControllers) {
-			dispatch_group_enter(group);
-			dispatch_async(dispatch_get_main_queue(), ^{
-				[childViewController renderTreeAndWait:wait perform:^{
-					dispatch_group_leave(group);
-				}];
-			});
-		}
-		
-		dispatch_group_enter(group);
-		[self.presenter renderComponents:self.resolveOptions perform:^{
-			dispatch_group_leave(group);
-		}];
-		dispatch_group_wait(group, DISPATCH_TIME_FOREVER);
-		
-		dispatch_async(dispatch_get_main_queue(), ^{
-			readyBlock();
-		});
-	});
+- (void)renderTreeAndWait:(BOOL)wait dispatchGroup:(dispatch_group_t)group {
+	for (UIViewController<RNNLayoutProtocol>* childViewController in self.childViewControllers) {
+		[childViewController renderTreeAndWait:wait dispatchGroup:group];
+	}
+	
+	[self.presenter renderComponents:self.resolveOptions dispatchGroup:group];
 }
 
 - (UIInterfaceOrientationMask)supportedInterfaceOrientations {

@@ -122,7 +122,7 @@
 		[navigationController rnn_setBackButtonColor:newOptions.topBar.backButton.color.get];
 	}
 	
-
+	
 	RNNLargeTitleOptions *largteTitleOptions = newOptions.topBar.largeTitle;
 	if (largteTitleOptions.color.hasValue || largteTitleOptions.fontSize.hasValue || largteTitleOptions.fontFamily.hasValue) {
 		[navigationController rnn_setNavigationBarLargeTitleFontFamily:[newOptions.topBar.largeTitle.fontFamily getWithDefaultValue:nil] fontSize:[newOptions.topBar.largeTitle.fontSize getWithDefaultValue:nil] color:[newOptions.topBar.largeTitle.color getWithDefaultValue:nil]];
@@ -139,40 +139,32 @@
 	}
 }
 
-- (void)renderComponents:(RNNNavigationOptions *)options perform:(RNNReactViewReadyCompletionBlock)readyBlock {
-	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
-		dispatch_group_t group = dispatch_group_create();
-		
+- (void)renderComponents:(RNNNavigationOptions *)options {
+	[self renderComponents:options dispatchGroup:dispatch_group_create()];
+}
+
+- (void)renderComponents:(RNNNavigationOptions *)options dispatchGroup:(dispatch_group_t)group {
+	if ([options.topBar.component.waitForRender getWithDefaultValue:NO]) {
 		dispatch_group_enter(group);
-		dispatch_async(dispatch_get_main_queue(), ^{
-			[self setCustomNavigationBarView:options perform:^{
-				dispatch_group_leave(group);
-			}];
-		});
-		
+	}
+	[self setCustomNavigationBarView:options perform:^{
+		if ([options.topBar.component.waitForRender getWithDefaultValue:NO]) {
+			dispatch_group_leave(group);
+		}
+	}];
+	
+	if ([options.topBar.background.component.waitForRender getWithDefaultValue:NO]) {
 		dispatch_group_enter(group);
-		dispatch_async(dispatch_get_main_queue(), ^{
-			[self setCustomNavigationComponentBackground:options perform:^{
-				dispatch_group_leave(group);
-			}];
-		});
-		
-		dispatch_group_wait(group, DISPATCH_TIME_FOREVER);
-		
-		dispatch_async(dispatch_get_main_queue(), ^{
-			if (readyBlock) {
-				readyBlock();
-			}
-		});
-	});
+	}
+	[self setCustomNavigationComponentBackground:options perform:^{
+		if ([options.topBar.background.component.waitForRender getWithDefaultValue:NO]) {
+			dispatch_group_leave(group);
+		}
+	}];
 }
 
 - (void)setCustomNavigationBarView:(RNNNavigationOptions *)options perform:(RNNReactViewReadyCompletionBlock)readyBlock {
 	RNNNavigationController* navigationController = self.bindedViewController;
-	if (![options.topBar.component.waitForRender getWithDefaultValue:NO] && readyBlock) {
-		readyBlock();
-		readyBlock = nil;
-	}
 	if (options.topBar.component.name.hasValue) {
 		RCTRootView *reactView = [_componentRegistry createComponentIfNotExists:options.topBar.component parentComponentId:navigationController.layoutInfo.componentId reactViewReadyBlock:readyBlock];
 		
@@ -190,10 +182,6 @@
 
 - (void)setCustomNavigationComponentBackground:(RNNNavigationOptions *)options perform:(RNNReactViewReadyCompletionBlock)readyBlock {
 	RNNNavigationController* navigationController = self.bindedViewController;
-	if (![options.topBar.background.component.waitForRender getWithDefaultValue:NO] && readyBlock) {
-		readyBlock();
-		readyBlock = nil;
-	}
 	if (options.topBar.background.component.name.hasValue) {
 		RCTRootView *reactView = [_componentRegistry createComponentIfNotExists:options.topBar.background.component parentComponentId:navigationController.layoutInfo.componentId reactViewReadyBlock:readyBlock];
 		

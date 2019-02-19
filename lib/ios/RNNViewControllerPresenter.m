@@ -161,17 +161,23 @@
 	}
 }
 
-- (void)renderComponents:(RNNNavigationOptions *)options perform:(RNNReactViewReadyCompletionBlock)readyBlock {
-	[self setCustomNavigationTitleView:options perform:readyBlock];
+- (void)renderComponents:(RNNNavigationOptions *)options {
+	[self setCustomNavigationTitleView:options perform:nil];
+}
+
+- (void)renderComponents:(RNNNavigationOptions *)options dispatchGroup:(dispatch_group_t)group {
+	if ([options.topBar.component.waitForRender getWithDefaultValue:NO]) {
+		dispatch_group_enter(group);
+	}
+	[self setCustomNavigationTitleView:options perform:^{
+		if ([options.topBar.component.waitForRender getWithDefaultValue:NO]) {
+			dispatch_group_leave(group);
+		}
+	}];
 }
 
 - (void)setCustomNavigationTitleView:(RNNNavigationOptions *)options perform:(RNNReactViewReadyCompletionBlock)readyBlock {
 	UIViewController<RNNLayoutProtocol>* viewController = self.bindedViewController;
-	if (![options.topBar.title.component.waitForRender getWithDefaultValue:NO] && readyBlock) {
-		readyBlock();
-		readyBlock = nil;
-	}
-	
 	if (options.topBar.title.component.name.hasValue) {
 		_customTitleView = (RNNReactView*)[_componentRegistry createComponentIfNotExists:options.topBar.title.component parentComponentId:viewController.layoutInfo.componentId reactViewReadyBlock:readyBlock];
 		_customTitleView.backgroundColor = UIColor.clearColor;

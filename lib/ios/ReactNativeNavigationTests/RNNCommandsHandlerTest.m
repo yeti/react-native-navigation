@@ -298,8 +298,9 @@
 	OCMStub([self.controllerFactory createLayout:[OCMArg any]]).andReturn(self.vc1);
 	
 	[[self.mainWindow expect] setRootViewController:self.vc1];
-	[self.uut setRoot:@{} completion:^{}];
-	[self.mainWindow verify];
+	[self.uut setRoot:@{} completion:^{
+		[self.mainWindow verify];
+	}];
 }
 
 - (void)testSetRoot_removeAllComponentsFromMainWindow {
@@ -343,7 +344,7 @@
 	id mockedVC = [OCMockObject partialMockForObject:self.vc1];
 	OCMStub([self.controllerFactory createLayout:[OCMArg any]]).andReturn(mockedVC);
 	
-	[[mockedVC expect] renderTreeAndWait:YES perform:[OCMArg any]];
+	[[mockedVC expect] renderTreeAndWait:YES dispatchGroup:[OCMArg any]];
 	[self.uut setRoot:@{} completion:^{}];
 	[mockedVC verify];
 }
@@ -356,7 +357,7 @@
 	id mockedVC = [OCMockObject partialMockForObject:self.vc1];
 	OCMStub([self.controllerFactory createLayout:[OCMArg any]]).andReturn(mockedVC);
 	
-	[[mockedVC expect] renderTreeAndWait:NO perform:[OCMArg any]];
+	[[mockedVC expect] renderTreeAndWait:NO dispatchGroup:[OCMArg any]];
 	[self.uut setRoot:@{} completion:^{}];
 	[mockedVC verify];
 }

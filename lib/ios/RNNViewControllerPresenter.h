@@ -8,7 +8,7 @@
 
 - (void)renderComponents:(RNNNavigationOptions *)options;
 
-- (void)renderComponents:(RNNNavigationOptions *)options dispatchGroup:(dispatch_group_t)group;
+- (void)renderComponents:(RNNNavigationOptions *)options dispatchGroup:(_Nonnull dispatch_group_t)group;
 
 @property (nonatomic, strong) RNNNavigationButtons* navigationButtons;
 

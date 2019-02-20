@@ -135,7 +135,8 @@ static NSString* const setDefaultOptions	= @"setDefaultOptions";
 		if([vc isKindOfClass:[RNNRootViewController class]]) {
 			RNNRootViewController* rootVc = (RNNRootViewController*)vc;
 			rootVc.previewController = newVc;
-			[newVc renderTreeAndWait:NO dispatchGroup:nil];
+			dispatch_group_t group = dispatch_group_create();
+			[newVc renderTreeAndWait:NO dispatchGroup:group];
 			
 			rootVc.previewCallback = ^(UIViewController *vcc) {
 				RNNRootViewController* rvc  = (RNNRootViewController*)vcc;
@@ -196,7 +197,7 @@ static NSString* const setDefaultOptions	= @"setDefaultOptions";
 	
  	NSArray<RNNLayoutProtocol> *childViewControllers = [_controllerFactory createChildrenLayout:children];
 	for (UIViewController<RNNLayoutProtocol>* viewController in childViewControllers) {
-		[viewController renderTreeAndWait:NO dispatchGroup:nil];
+		[viewController renderTreeAndWait:NO dispatchGroup:dispatch_group_create()];
 	}
 	RNNNavigationOptions* options = [childViewControllers.lastObject getCurrentChild].resolveOptions;
 	UIViewController *fromVC = [_store findComponentForId:componentId];
@@ -274,11 +275,20 @@ static NSString* const setDefaultOptions	= @"setDefaultOptions";
 	
 	UIViewController<RNNParentProtocol> *newVc = [_controllerFactory createLayout:layout];
 	
-	[newVc renderTreeAndWait:[newVc.resolveOptions.animations.showModal.waitForRender getWithDefaultValue:NO] dispatchGroup:nil];
-	[_modalManager showModal:newVc animated:[newVc.getCurrentChild.resolveOptions.animations.showModal.enable getWithDefaultValue:YES] hasCustomAnimation:newVc.getCurrentChild.resolveOptions.animations.showModal.hasCustomAnimation completion:^(NSString *componentId) {
-		[_eventEmitter sendOnNavigationCommandCompletion:showModal params:@{@"layout": layout}];
-		completion(componentId);
-	}];
+	dispatch_group_t group = dispatch_group_create();
+	[newVc renderTreeAndWait:[newVc.resolveOptions.animations.showModal.waitForRender getWithDefaultValue:NO] dispatchGroup:group];
+	
+	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
+		dispatch_group_wait(group, DISPATCH_TIME_FOREVER);
+		
+		dispatch_async(dispatch_get_main_queue(), ^{
+			[_modalManager showModal:newVc animated:[newVc.getCurrentChild.resolveOptions.animations.showModal.enable getWithDefaultValue:YES] hasCustomAnimation:newVc.getCurrentChild.resolveOptions.animations.showModal.hasCustomAnimation completion:^(NSString *componentId) {
+				[_eventEmitter sendOnNavigationCommandCompletion:showModal params:@{@"layout": layout}];
+				completion(componentId);
+			}];
+		});
+	});
+	
 }
 
 - (void)dismissModal:(NSString*)componentId mergeOptions:(NSDictionary *)mergeOptions completion:(RNNTransitionCompletionBlock)completion rejection:(RNNTransitionRejectionBlock)reject {
@@ -324,7 +334,7 @@ static NSString* const setDefaultOptions	= @"setDefaultOptions";
 	[self assertReady];
 	
 	UIViewController<RNNParentProtocol>* overlayVC = [_controllerFactory createLayout:layout];
-	[overlayVC renderTreeAndWait:NO dispatchGroup:nil];
+	[overlayVC renderTreeAndWait:NO dispatchGroup:dispatch_group_create()];
 	UIWindow* overlayWindow = [[RNNOverlayWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
 	overlayWindow.rootViewController = overlayVC;
 	[_overlayManager showOverlayWindow:overlayWindow];

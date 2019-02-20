@@ -165,7 +165,7 @@
 	[self setCustomNavigationTitleView:options perform:nil];
 }
 
-- (void)renderComponents:(RNNNavigationOptions *)options dispatchGroup:(dispatch_group_t)group {
+- (void)renderComponents:(RNNNavigationOptions *)options dispatchGroup:(_Nonnull dispatch_group_t)group {
 	if ([options.topBar.component.waitForRender getWithDefaultValue:NO]) {
 		dispatch_group_enter(group);
 	}

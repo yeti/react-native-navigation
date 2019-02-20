@@ -52,7 +52,7 @@
 	[self.options overrideOptions:options];
 }
 
-- (void)renderTreeAndWait:(BOOL)wait dispatchGroup:(dispatch_group_t)group {
+- (void)renderTreeAndWait:(BOOL)wait dispatchGroup:(_Nonnull dispatch_group_t)group {
 	[self.getCurrentChild renderTreeAndWait:wait dispatchGroup:group];
 }
 

@@ -38,7 +38,7 @@
 		[expectation fulfill];
 	} rejection:nil];
 	
-	[self waitForExpectationsWithTimeout:1 handler:nil];
+	[self waitForExpectationsWithTimeout:10 handler:nil];
 }
 
 - (void)testPopToSpecificVC_removeAllPopedVCFromStack {

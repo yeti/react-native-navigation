@@ -65,7 +65,7 @@
 	[super viewWillAppear:animated];
 	
 	[_presenter applyOptions:self.resolveOptions];
-//	[_presenter renderComponents:self.resolveOptions dispatchGroup:nil];
+	[_presenter renderComponents:self.resolveOptions dispatchGroup:dispatch_group_create()];
 	
 	[((UIViewController<RNNParentProtocol> *)self.parentViewController) onChildWillAppear];
 }
@@ -88,7 +88,7 @@
 	[self.eventEmitter sendComponentDidDisappear:self.layoutInfo.componentId componentName:self.layoutInfo.name];
 }
 
-- (void)renderTreeAndWait:(BOOL)wait dispatchGroup:(dispatch_group_t)group {
+- (void)renderTreeAndWait:(BOOL)wait dispatchGroup:(_Nonnull dispatch_group_t)group {
 	if (self.isExternalViewController) {
 		return;
 	}

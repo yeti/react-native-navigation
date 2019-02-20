@@ -76,7 +76,6 @@ static NSString* const setDefaultOptions	= @"setDefaultOptions";
 	[_store removeAllComponentsFromWindow:_mainWindow];
 	
 	UIViewController<RNNLayoutProtocol> *vc = [_controllerFactory createLayout:layout[@"root"]];
-	NSDate *methodStart = [NSDate date];
 	dispatch_group_t group = dispatch_group_create();
 	[vc renderTreeAndWait:[vc.resolveOptions.animations.setRoot.waitForRender getWithDefaultValue:NO] dispatchGroup:group];
 	
@@ -84,9 +83,6 @@ static NSString* const setDefaultOptions	= @"setDefaultOptions";
 		dispatch_group_wait(group, DISPATCH_TIME_FOREVER);
 		
 		dispatch_async(dispatch_get_main_queue(), ^{
-			NSDate *methodFinish = [NSDate date];
-			NSTimeInterval executionTime = [methodFinish timeIntervalSinceDate:methodStart];
-			NSLog(@"executionTime = %f", executionTime);
 			_mainWindow.rootViewController = vc;
 			[_eventEmitter sendOnNavigationCommandCompletion:setRoot params:@{@"layout": layout}];
 			completion();

@@ -15,6 +15,7 @@ class CustomTransitionOrigin extends Component {
           fontFamily: 'HelveticaNeue-Italic',
           fontSize: 16
         },
+        drawBehind: true,
         largeTitle: {
           visible: false
         },

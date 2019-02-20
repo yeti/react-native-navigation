@@ -175,6 +175,9 @@ static NSString* const setDefaultOptions	= @"setDefaultOptions";
 		id animationDelegate = (newVc.resolveOptions.animations.push.hasCustomAnimation || newVc.resolveOptions.customTransition.animations) ? newVc : nil;
 		[newVc renderTreeAndWait:([newVc.resolveOptions.animations.push.waitForRender getWithDefaultValue:NO] || animationDelegate) dispatchGroup:group];
 		
+		CGSize availableSize = UIApplication.sharedApplication.delegate.window.bounds.size;
+		[[ReactNativeNavigation getBridge].uiManager setAvailableSize:availableSize forRootView:newVc.view];
+		
 		dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
 			dispatch_group_wait(group, DISPATCH_TIME_FOREVER);
 			

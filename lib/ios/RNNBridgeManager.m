@@ -103,5 +103,9 @@
 	UIApplication.sharedApplication.delegate.window.rootViewController =  nil;
 }
 
+- (RNNCommandsHandler *)getRNNCommandsHandler {
+	return _commandsHandler;
+}
+
 @end
 

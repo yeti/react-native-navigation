@@ -3,6 +3,10 @@
 #import <React/RCTBridge.h>
 #import <React/RCTUIManager.h>
 #import "RNNBridgeManagerDelegate.h"
+#import "RNNBridgeManager.h"
+
+//@class RNNBridgeManager;
+
 
 typedef UIViewController * (^RNNExternalViewCreator)(NSDictionary* props, RCTBridge* bridge);
 
@@ -18,4 +22,8 @@ typedef UIViewController * (^RNNExternalViewCreator)(NSDictionary* props, RCTBri
 
 + (RCTBridge *)getBridge;
 
++ (RNNBridgeManager *)getBridgeManager;
+
 @end
+
+

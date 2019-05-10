@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0A1A00FC2284AFFD004D4A90 /* RNNBridgeManager.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2DCD9193200014A900EDC75D /* RNNBridgeManager.h */; };
+		0A1A00FD2284B281004D4A90 /* RNNCommandsHandler.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7B4928061E70415400555040 /* RNNCommandsHandler.h */; };
 		214545251F4DC125006E8DA1 /* RNNUIBarButtonItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 214545241F4DC125006E8DA1 /* RNNUIBarButtonItem.m */; };
 		2145452A1F4DC85F006E8DA1 /* RCTHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 214545291F4DC85F006E8DA1 /* RCTHelpers.m */; };
 		21B85E5D1F44480200B314B5 /* RNNNavigationButtons.m in Sources */ = {isa = PBXBuildFile; fileRef = 21B85E5C1F44480200B314B5 /* RNNNavigationButtons.m */; };
@@ -338,6 +340,8 @@
 			dstPath = "include/$(PRODUCT_NAME)";
 			dstSubfolderSpec = 16;
 			files = (
+				0A1A00FD2284B281004D4A90 /* RNNCommandsHandler.h in CopyFiles */,
+				0A1A00FC2284AFFD004D4A90 /* RNNBridgeManager.h in CopyFiles */,
 				50C5FD8320D7D6DD00F1EA8A /* RNNBridgeManagerDelegate.h in CopyFiles */,
 				50C5FD8220D7D6D600F1EA8A /* ReactNativeNavigation.h in CopyFiles */,
 			);
@@ -346,6 +350,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0A1A00C622836E8D004D4A90 /* RNNHeaders.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNNHeaders.h; sourceTree = "<group>"; };
 		214545241F4DC125006E8DA1 /* RNNUIBarButtonItem.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNNUIBarButtonItem.m; sourceTree = "<group>"; };
 		214545261F4DC164006E8DA1 /* RNNUIBarButtonItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNNUIBarButtonItem.h; sourceTree = "<group>"; };
 		214545281F4DC81F006E8DA1 /* RCTHelpers.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RCTHelpers.h; sourceTree = "<group>"; };
@@ -1126,6 +1131,7 @@
 		D8AFADB41BEE6F3F00A4592D = {
 			isa = PBXGroup;
 			children = (
+				0A1A00C622836E8D004D4A90 /* RNNHeaders.h */,
 				214545271F4DC7ED006E8DA1 /* Helpers */,
 				7BA500731E2544B9001B9E1B /* ReactNativeNavigation.h */,
 				7BA500741E2544B9001B9E1B /* ReactNativeNavigation.m */,

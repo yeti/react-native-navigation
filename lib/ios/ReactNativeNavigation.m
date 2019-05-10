@@ -32,6 +32,10 @@
 	return [[ReactNativeNavigation sharedInstance].bridgeManager bridge];
 }
 
++ (RNNBridgeManager *)getBridgeManager {
+	return [ReactNativeNavigation sharedInstance].bridgeManager;
+}
+
 + (UIViewController *)findViewController:(NSString *)componentId {
     return [RNNLayoutManager findComponentForId:componentId];
 }

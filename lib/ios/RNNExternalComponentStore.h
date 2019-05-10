@@ -4,6 +4,7 @@
 #import "ReactNativeNavigation.h"
 #import "RNNLayoutInfo.h"
 
+
 @interface RNNExternalComponentStore : NSObject
 
 - (void)registerExternalComponent:(NSString *)name callback:(RNNExternalViewCreator)callback;

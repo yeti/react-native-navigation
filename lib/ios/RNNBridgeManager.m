@@ -28,6 +28,7 @@
 	RNNExternalComponentStore* _store;
 
 	RNNCommandsHandler* _commandsHandler;
+	RNNBridgeModule* _bridgeModule;
 }
 
 - (instancetype)initWithJsCodeLocation:(NSURL *)jsCodeLocation launchOptions:(NSDictionary *)launchOptions bridgeManagerDelegate:(id<RNNBridgeManagerDelegate>)delegate mainWindow:(UIWindow *)mainWindow {
@@ -84,8 +85,16 @@
 	
 	_commandsHandler = [[RNNCommandsHandler alloc] initWithControllerFactory:controllerFactory eventEmitter:eventEmitter stackManager:[RNNNavigationStackManager new] modalManager:[RNNModalManager new] overlayManager:[RNNOverlayManager new] mainWindow:_mainWindow];
 	RNNBridgeModule *bridgeModule = [[RNNBridgeModule alloc] initWithCommandsHandler:_commandsHandler];
+	
+	_bridgeModule = bridgeModule;
 
 	return [@[bridgeModule,eventEmitter] arrayByAddingObjectsFromArray:[self extraModulesFromDelegate]];
+}
+
+# pragma mark - React Native Bridge Module
+
+- (RNNBridgeModule *)getBridgeModule {
+	return _bridgeModule;
 }
 
 # pragma mark - JavaScript & Bridge Notifications

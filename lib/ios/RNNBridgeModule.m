@@ -17,6 +17,12 @@ RCT_EXPORT_MODULE();
 	return self;
 }
 
+-(void)pushNativeViewController:(NSString*)componentId viewController:(UIViewController *)viewController {
+	// commandId is only used for the sendOnNavigationCommandCompletion event transmitted over the bridge.
+	// Unless we start listening for that event this does not need to change.
+	[_commandsHandler pushNativeViewController:componentId commandId:@"pushNativeViewController" viewController:viewController];
+}
+
 #pragma mark - JS interface
 
 RCT_EXPORT_METHOD(setRoot:(NSString*)commandId layout:(NSDictionary*)layout resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {

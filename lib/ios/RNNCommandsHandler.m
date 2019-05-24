@@ -168,6 +168,17 @@ static NSString* const setDefaultOptions	= @"setDefaultOptions";
 	}
 }
 
+- (void)pushNativeViewController:(NSString*)componentId commandId:(NSString*)commandId viewController:(UIViewController*)viewController {
+	[self assertReady];
+	
+	UIViewController *fromVC = [RNNLayoutManager findComponentForId:componentId];
+	RCTExecuteOnMainQueue(^{
+		[_stackManager push:viewController onTop:fromVC animated:YES animationDelegate:nil completion:^{
+			[_eventEmitter sendOnNavigationCommandCompletion:push commandId:commandId params:@{@"componentId": componentId}];
+		} rejection:nil];
+	});
+}
+
 - (void)setStackRoot:(NSString*)componentId commandId:(NSString*)commandId children:(NSArray*)children completion:(RNNTransitionCompletionBlock)completion rejection:(RCTPromiseRejectBlock)rejection {
 	[self assertReady];
 	

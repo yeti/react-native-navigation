@@ -8,4 +8,6 @@
 
 -(instancetype)initWithCommandsHandler:(RNNCommandsHandler*)commandsHandler;
 
+-(void)pushNativeViewController:(NSString*)componentId viewController:(UIViewController *)viewController;
+
 @end

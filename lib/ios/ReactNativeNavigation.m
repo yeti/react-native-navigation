@@ -36,6 +36,10 @@
     return [RNNLayoutManager findComponentForId:componentId];
 }
 
++ (RNNBridgeManager *)getBridgeManager {
+	return [ReactNativeNavigation sharedInstance].bridgeManager;
+}
+
 # pragma mark - instance
 
 + (instancetype) sharedInstance {

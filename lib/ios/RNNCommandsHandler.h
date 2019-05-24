@@ -20,6 +20,8 @@
 
 - (void)push:(NSString*)componentId commandId:(NSString*)commandId layout:(NSDictionary*)layout completion:(RNNTransitionCompletionBlock)completion rejection:(RCTPromiseRejectBlock)rejection;
 
+- (void)pushNativeViewController:(NSString*)componentId commandId:(NSString*)commandId viewController:(UIViewController*)viewController;
+
 - (void)pop:(NSString*)componentId commandId:(NSString*)commandId mergeOptions:(NSDictionary*)options completion:(RNNTransitionCompletionBlock)completion rejection:(RCTPromiseRejectBlock)rejection;
 
 - (void)popTo:(NSString*)componentId commandId:(NSString*)commandId mergeOptions:(NSDictionary*)options completion:(RNNTransitionCompletionBlock)completion rejection:(RCTPromiseRejectBlock)rejection;
